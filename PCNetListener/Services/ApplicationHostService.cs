@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using PCNetListener.Contracts.Activation;
 using PCNetListener.Contracts.Services;
 using PCNetListener.Contracts.Views;
+using PCNetListener.Core.Services;
 using PCNetListener.ViewModels;
 
 namespace PCNetListener.Services
@@ -16,6 +17,7 @@ namespace PCNetListener.Services
     public class ApplicationHostService : IHostedService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IPcNetworkListener _pcNetworkListener;
         private readonly INavigationService _navigationService;
         private readonly IToastNotificationsService _toastNotificationsService;
         private readonly IPersistAndRestoreService _persistAndRestoreService;
@@ -24,8 +26,9 @@ namespace PCNetListener.Services
         private IShellWindow _shellWindow;
         private bool _isInitialized;
 
-        public ApplicationHostService(IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService, IToastNotificationsService toastNotificationsService)
+        public ApplicationHostService(IPcNetworkListener pcNetworkListener, IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService, IToastNotificationsService toastNotificationsService)
         {
+            _pcNetworkListener = pcNetworkListener;
             _serviceProvider = serviceProvider;
             _activationHandlers = activationHandlers;
             _navigationService = navigationService;

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
@@ -12,6 +12,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>new3bicon.ico</ApplicationIcon>
+    <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Syncfusion.Shared.WPF" Version="19.1.0.67" />

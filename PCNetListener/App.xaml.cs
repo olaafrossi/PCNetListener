@@ -21,6 +21,8 @@ using PCNetListener.Models;
 using PCNetListener.Services;
 using PCNetListener.ViewModels;
 using PCNetListener.Views;
+using Serilog;
+using Serilog.Core;
 
 namespace PCNetListener
 {
@@ -41,6 +43,16 @@ namespace PCNetListener
         {
         }
 
+        static void BuildConfig(IConfigurationBuilder builder)
+        {
+            // Check the current directory that the application is running on 
+            // Then once the file 'appsetting.json' is found, we are adding it.
+            // We add env variables, which can override the configs in appsettings.json
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+        }
+
         private async void OnStartup(object sender, StartupEventArgs e)
         {
             // https://docs.microsoft.com/windows/uwp/design/shell/tiles-and-notifications/send-local-toast?tabs=desktop
@@ -55,11 +67,21 @@ namespace PCNetListener
             };
 
             // TODO: Register arguments you want to use on App initialization
-            var activationArgs = new Dictionary<string, string>
+            var activationArgs = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase)
             {
                 { ToastNotificationActivationHandler.ActivationArguments, string.Empty }
             };
+
             var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
+            var builder = new ConfigurationBuilder();
+            BuildConfig(builder);
+
+            Log.Logger = new LoggerConfiguration() // initiate the logger configuration
+                .ReadFrom.Configuration(builder.Build()) // connect serilog to our configuration folder
+                .Enrich.FromLogContext() //Adds more information to our logs from built in Serilog 
+                .WriteTo.Console() // decide where the logs are going to be shown
+                .CreateLogger(); //initialise the logger
 
             // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
             _host = Host.CreateDefaultBuilder(e.Args)
@@ -69,6 +91,7 @@ namespace PCNetListener
                         c.AddInMemoryCollection(activationArgs);
                     })
                     .ConfigureServices(ConfigureServices)
+                    .UseSerilog()
                     .Build();
 
             if (ToastNotificationManagerCompat.WasCurrentProcessToastActivated())
@@ -92,6 +115,7 @@ namespace PCNetListener
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IPcNetworkListener, PcNetworkListener>();
 
             // Services
             services.AddSingleton<IToastNotificationsService, ToastNotificationsService>();
