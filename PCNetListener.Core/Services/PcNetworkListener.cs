@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PCNetListener.Core.Models;
 using Serilog.Core;
+using Microsoft.Toolkit.Mvvm;
+using Microsoft.Toolkit.Mvvm.Messaging;
 
 namespace PCNetListener.Core.Services
 {
@@ -32,6 +34,11 @@ namespace PCNetListener.Core.Services
             
             _log.LogInformation("The PC Network Listener Service has started from the constructor with log and config args", typeof(ILogEventEnricher));
             Run();
+        }
+
+        public string Test()
+        {
+            return "hello from the pc singleton";
         }
 
         public event EventHandler<NetworkMessagesEventArgs> MessageHit;

@@ -26,6 +26,7 @@ namespace PCNetListener.Services
             Configure<ContentGridDetailViewModel, ContentGridDetailPage>();
             Configure<ListDetailsViewModel, ListDetailsPage>();
             Configure<SettingsViewModel, SettingsPage>();
+
         }
 
         public Type GetPageType(string key)
