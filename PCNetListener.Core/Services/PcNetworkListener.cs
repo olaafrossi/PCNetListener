@@ -36,11 +36,6 @@ namespace PCNetListener.Core.Services
             Run();
         }
 
-        public string Test()
-        {
-            return "hello from the pc singleton";
-        }
-
         public event EventHandler<NetworkMessagesEventArgs> MessageHit;
 
         public int GetAppSettingsDataUdpPort()

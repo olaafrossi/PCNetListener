@@ -19,11 +19,13 @@ namespace PCNetListener.ViewModels
     {
         private readonly INavigationService _navigationService;
         private readonly IPcNetworkListener _pcNet;
+        private readonly IToastNotificationsService _toastNotificationsService;
 
-        public BlankViewModel(IPcNetworkListener pcNet, INavigationService navigationService)
+        public BlankViewModel(IPcNetworkListener pcNet, INavigationService navigationService, IToastNotificationsService toastNotificationsService)
         {
             _pcNet = pcNet;
             _navigationService = navigationService;
+            _toastNotificationsService = toastNotificationsService;
             pcNet.MessageHit += PcNet_MessageHit;
         }
 
@@ -31,8 +33,8 @@ namespace PCNetListener.ViewModels
         {
             var data = _pcNet.GetAppSettingsDataUdpPort();
             Console.WriteLine(data);
-            Console.WriteLine("fgdfgdfg");
             Console.WriteLine("hello from the view model");
+            _toastNotificationsService.ShowToastNotificationSample();
         }
 
         public void OnNavigatedFrom()
